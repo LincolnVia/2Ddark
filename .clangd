@@ -1,0 +1,6 @@
+CompileFlags:
+  CompilationDatabase: Ancestors
+
+Diagnostics:
+  UnusedIncludes: Strict
+  MissingIncludes: Strict

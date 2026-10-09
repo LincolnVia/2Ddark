@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  linux:
+    name: Linux GCC (${{ matrix.configuration }})
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        configuration: [debug, development, release]
+    steps:
+      - uses: actions/checkout@v7
+      - name: Configure
+        run: cmake --preset gcc-${{ matrix.configuration }}
+      - name: Build
+        run: cmake --build --preset gcc-${{ matrix.configuration }} --parallel
+      - name: Test
+        run: ctest --preset gcc-${{ matrix.configuration }}
+
+  windows:
+    name: Windows MSVC (${{ matrix.configuration }})
+    runs-on: windows-2022
+    strategy:
+      fail-fast: false
+      matrix:
+        configuration: [debug, development, release]
+    steps:
+      - uses: actions/checkout@v7
+      - name: Configure
+        run: cmake --preset msvc-${{ matrix.configuration }}
+      - name: Build
+        run: cmake --build --preset msvc-${{ matrix.configuration }} --parallel
+      - name: Test
+        run: ctest --preset msvc-${{ matrix.configuration }}
